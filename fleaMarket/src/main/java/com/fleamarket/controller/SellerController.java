@@ -34,10 +34,9 @@ public class SellerController {
         return new ResponseEntity<>(sellerService.getAllProducts(seller), HttpStatus.OK);
     }
 
-
     @DeleteMapping("/deleteSeller")
-    public ResponseEntity<String> deleteSeller(@RequestParam String username) {
-        sellerService.deleteSeller(username);
+    public ResponseEntity<String> deleteSeller(@RequestParam String seller) {
+        sellerService.deleteSeller(seller);
         return ResponseEntity.ok("Seller was successfully deleted");
     }
 
@@ -46,6 +45,22 @@ public class SellerController {
         sellerService.changeSellerName(oldUsername,newUsername);
         return ResponseEntity.ok("Seller was successfully updated");
     }
+    @PostMapping("/addProduct")
+    public ResponseEntity<String> addProduct(@RequestParam String product,String seller) {
+        sellerService.addProductToSeller(product,seller);
+        return ResponseEntity.ok("Product was successfully added to seller");
+    }
+    @DeleteMapping("/deleteProduct")
+    public ResponseEntity<String> deleteProduct(@RequestParam String product,String seller) {
+        sellerService.deleteProduct(product,seller);
+        return ResponseEntity.ok("Product was successfully deleted");
+    }
+    @PatchMapping("/updateProduct")
+    public ResponseEntity<String> updateProduct(@RequestParam String oldProductName, String newProductName,String seller) {
+        sellerService.changeProduct(oldProductName,newProductName,seller);
+        return ResponseEntity.ok("Product was successfully updated");
+    }
+
 
 
 }

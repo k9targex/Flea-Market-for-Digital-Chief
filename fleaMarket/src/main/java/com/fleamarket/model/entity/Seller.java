@@ -28,4 +28,11 @@ public class Seller {
             cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.PERSIST})
     @JsonIgnore
     private List<Product> products;
+    public Product getProduct(String productName){
+        return products.stream().filter(p -> p.getProductName().equals(productName)).findFirst().orElse(null);
+    }
+
+    public void addProduct(Product product){
+        products.add(product);
+    }
 }
