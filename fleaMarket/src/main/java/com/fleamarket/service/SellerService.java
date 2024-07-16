@@ -93,11 +93,14 @@ public class SellerService {
                             () ->
                                     new SellerNotFoundException(
                                             String.format(SELLER_NOT_FOUND_MESSAGE, oldUsername)));
-
+    if (newUsername.trim().isEmpty()) {
+      throw new IllegalArgumentException("Username parameter cannot be empty");
+    }
     if (sellerRepository.existsSellerBySellerName(newUsername).booleanValue()) {
       throw new IllegalArgumentException(
               String.format("Name \"%s\" is already taken (((", newUsername));
     }
+
     sellerOptional.setSellerName(newUsername);
     sellerRepository.save(sellerOptional);
   }
@@ -188,6 +191,9 @@ public class SellerService {
                     .findSellerBySellerName(seller)
                     .orElseThrow(
                             () -> new SellerNotFoundException(String.format(SELLER_NOT_FOUND_MESSAGE, seller)));
+    if (newProductName.trim().isEmpty()) {
+      throw new IllegalArgumentException("Product parameter cannot be empty");
+    }
 
     Product oldProduct = sellerOptional.getProduct(oldProductName);
     if (oldProduct == null) {
