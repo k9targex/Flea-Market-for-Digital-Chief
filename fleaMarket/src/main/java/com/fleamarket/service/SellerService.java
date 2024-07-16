@@ -8,16 +8,16 @@ import com.fleamarket.model.entity.Product;
 import com.fleamarket.model.entity.Seller;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Transactional
 public class SellerService {
   private static final String SELLER_NOT_FOUND_MESSAGE = "Seller \"%s\" doesn't exist";
-  private static final String PRODUCT_NOT_FOUND_MESSAGE = "Product with ID = \"%s\" doesn't exist";
   private SellerRepository sellerRepository;
   private ProductRepository productRepository;
 
@@ -46,8 +46,11 @@ public class SellerService {
   }
 
   public void createSeller(String username) {
+    if (username.trim().isEmpty()) {
+      throw new IllegalArgumentException("Seller parameter cannot be empty");
+    }
     if (sellerRepository.existsSellerBySellerName(username).booleanValue()) {
-      throw new SellerNotFoundException(String.format("Name \"%s\" already taken (((", username));
+      throw new ResponseStatusException(HttpStatus.CONFLICT,String.format("Name \" %s \" already taken (((", username));
     }
     Seller seller = new Seller();
     seller.setSellerName(username);
@@ -64,7 +67,7 @@ public class SellerService {
                         String.format(SELLER_NOT_FOUND_MESSAGE, oldUsername)));
 
     if (sellerRepository.existsSellerBySellerName(newUsername).booleanValue()) {
-      throw new SellerNotFoundException(
+      throw new IllegalArgumentException(
           String.format("Name \"%s\" is already taken (((", newUsername));
     }
     sellerOptional.setSellerName(newUsername);
@@ -79,21 +82,24 @@ public class SellerService {
     return sellerOptional.getProducts();
   }
 
-  public String addProductToSeller(String product, String seller) {
+  public void addProductToSeller(String product, String seller) {
     Seller sellerOptional =
         sellerRepository
             .findSellerBySellerName(seller)
             .orElseThrow(
                 () -> new SellerNotFoundException(String.format(SELLER_NOT_FOUND_MESSAGE, seller)));
-
+    if (product.trim().isEmpty()) {
+      throw new IllegalArgumentException("Product parameter cannot be empty");
+    }
     if (sellerOptional.getProduct(product) != null) {
-      return String.format("Product %s was already added yet(((((", product);
+      throw new IllegalArgumentException(String.format("Product %s was already added yet(((((", product));
     }
     Product newProduct = new Product();
     newProduct.setProductName(product);
+    newProduct.setSeller(sellerOptional);
     sellerOptional.addProduct(newProduct);
+    productRepository.save(newProduct);
     sellerRepository.save(sellerOptional);
-    return String.format("Product %s was successfully added ", product);
   }
 
   public void deleteProduct(String productDelete, String seller) {
@@ -102,13 +108,15 @@ public class SellerService {
             .findSellerBySellerName(seller)
             .orElseThrow(
                 () -> new SellerNotFoundException(String.format(SELLER_NOT_FOUND_MESSAGE, seller)));
-    if (sellerOptional.getProduct(productDelete) == null) {
+    Product productToDelete = sellerOptional.getProduct(productDelete);
+    if ( productToDelete == null) {
       throw new ProductNotFoundException(
           String.format("Product %s doesn't exist(((((", productDelete));
     }
     sellerOptional
         .getProducts()
         .removeIf(product -> product.getProductName().equals(productDelete));
+    productRepository.delete(productToDelete);
     sellerRepository.save(sellerOptional);
   }
 
@@ -119,12 +127,19 @@ public class SellerService {
             .orElseThrow(
                 () -> new SellerNotFoundException(String.format(SELLER_NOT_FOUND_MESSAGE, seller)));
 
-    Product product = sellerOptional.getProduct(oldProductName);
-    if (product == null) {
+    Product oldProduct = sellerOptional.getProduct(oldProductName);
+    if (oldProduct == null) {
       throw new ProductNotFoundException(
           String.format("Product %s doesn't exist(((((", oldProductName));
     }
-    product.setProductName(newProductName);
-    productRepository.save(product);
+    Product newProduct = sellerOptional.getProduct(newProductName);
+    if (newProduct == null) {
+      oldProduct.setProductName(newProductName);
+      productRepository.save(oldProduct);
+    }
+    else{
+      throw new IllegalArgumentException(
+          String.format("Product with name %s already exist(((((", newProductName));
+    }
   }
 }

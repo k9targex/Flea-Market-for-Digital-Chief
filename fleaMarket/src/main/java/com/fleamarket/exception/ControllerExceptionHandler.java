@@ -11,17 +11,26 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
+
 @RestControllerAdvice
 @Slf4j
 public class ControllerExceptionHandler {
 
-    @ExceptionHandler({MissingServletRequestParameterException.class, ResponseStatusException.class})
+    @ExceptionHandler({MissingServletRequestParameterException.class, IllegalArgumentException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseError handleIllegalArgumentException(
-            MissingServletRequestParameterException ex, WebRequest request) {
+            Exception ex, WebRequest request) {
         String errorMessage = "Error 400: Bad request - " + ex.getMessage();
         log.error(errorMessage);
         return new ResponseError(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+    @ExceptionHandler({ResponseStatusException.class})
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseError handleResponseException(
+            ResponseStatusException ex, WebRequest request) {
+        String errorMessage = "Error 409: Conflict - " + ex.getReason();
+        log.error(errorMessage);
+        return new ResponseError(HttpStatus.CONFLICT, ex.getReason());
     }
 
     @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
@@ -45,9 +54,10 @@ public class ControllerExceptionHandler {
             ProductNotFoundException.class
     })
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseError usernameNotFoundException(RuntimeException ex, WebRequest request) {
+    public ResponseError notFoundException(RuntimeException ex, WebRequest request) {
         String errorMessage = "Error 404: Not Found - " + ex.getMessage();
         log.error(errorMessage);
         return new ResponseError(HttpStatus.NOT_FOUND, ex.getMessage());
     }
+
 }

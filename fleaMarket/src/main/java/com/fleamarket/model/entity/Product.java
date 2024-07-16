@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Collections;
-import java.util.List;
-
 @Entity
 @Table(name = "products")
 @Getter
@@ -18,14 +15,11 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name="product_name")
+    @Column(name="product")
     private String productName;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "seller_id")
     private Seller seller;
 
-    @PreRemove
-    public void removeUser() {
-    seller.getProducts().removeAll(Collections.singleton(this));
-}
 }

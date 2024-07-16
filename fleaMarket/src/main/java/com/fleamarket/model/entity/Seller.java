@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -25,7 +24,8 @@ public class Seller {
     @OneToMany(
             mappedBy = "seller",
             fetch = FetchType.EAGER,
-            cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.PERSIST})
+            cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REMOVE}
+            )
     @JsonIgnore
     private List<Product> products;
     public Product getProduct(String productName){
@@ -35,4 +35,5 @@ public class Seller {
     public void addProduct(Product product){
         products.add(product);
     }
+
 }

@@ -21,7 +21,7 @@ public class SellerController {
 
 
     @PostMapping("/crteateSeller")
-    ResponseEntity<String> createSeller(@RequestParam String seller) {
+    ResponseEntity<String> createSeller(@RequestParam(name = "seller", required = true)String seller) {
         sellerService.createSeller(seller);
         return ResponseEntity.ok("Seller was successfully created");
     }
