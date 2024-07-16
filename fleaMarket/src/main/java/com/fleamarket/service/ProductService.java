@@ -1,9 +1,7 @@
 package com.fleamarket.service;
 
 import com.fleamarket.dao.ProductRepository;
-import com.fleamarket.dao.SellerRepository;
 import com.fleamarket.exception.ProductNotFoundException;
-import com.fleamarket.exception.SellerNotFoundException;
 import com.fleamarket.model.entity.Product;
 import com.fleamarket.model.entity.Seller;
 import jakarta.transaction.Transactional;
@@ -20,6 +18,13 @@ public class ProductService {
     public void setProductRepository(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
+    /**
+     * Retrieves the seller associated with a product given its ID.
+     *
+     * @param productId ID of the product to retrieve the seller for
+     * @return Seller associated with the product
+     * @throws ProductNotFoundException if the product with the given ID is not found
+     */
     public Seller getSellerByProductId(Long productId) {
         Product productOptional =
                 productRepository
