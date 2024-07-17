@@ -130,7 +130,7 @@ class SellerServiceTest {
   void testGetAllProducts_SellerExists() {
     when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME))
         .thenReturn(Optional.of(existingSeller));
-    List<Product> products = sellerService.getAllProducts(EXISTING_SELLER_NAME);
+    products = sellerService.getAllProducts(EXISTING_SELLER_NAME);
     assertNotNull(products);
     assertEquals(1, products.size());
     assertEquals(EXISTING_PRODUCT_NAME, products.get(0).getProductName());
@@ -340,7 +340,7 @@ class SellerServiceTest {
                 sellerService.changeProduct(
                     EXISTING_PRODUCT_NAME, NEW_PRODUCT_NAME, EXISTING_SELLER_NAME));
     assertEquals(
-        String.format("Product newProduct already exists(((((", NEW_PRODUCT_NAME),
+        "Product newProduct already exists(((((",
         exception.getMessage());
   }
 
@@ -369,6 +369,6 @@ class SellerServiceTest {
         assertThrows(
             IllegalArgumentException.class,
             () -> sellerService.changeProduct(EXISTING_PRODUCT_NAME, "", EXISTING_SELLER_NAME));
-    assertEquals(String.format("Product parameter cannot be empty"), exception.getMessage());
+    assertEquals("Product parameter cannot be empty", exception.getMessage());
   }
 }

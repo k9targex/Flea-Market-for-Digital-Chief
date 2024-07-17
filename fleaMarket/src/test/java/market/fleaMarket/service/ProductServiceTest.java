@@ -23,8 +23,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
   private static final String PRODUCT_NOT_FOUND_MESSAGE = "Product with ID = \"%d\" doesn't exist";
-  private static long nonExistingProductId = 2L;
-  private static long ExistingProductId = 1L;
+  private static long nonexistingProductId = 2L;
+  private static long existingProductId = 1L;
 
   @Mock private ProductRepository productRepository;
 
@@ -51,21 +51,21 @@ class ProductServiceTest {
 
   @Test
   void testGetSellerByProductId_Success() {
-    when(productRepository.findProductById(ExistingProductId))
+    when(productRepository.findProductById(existingProductId))
         .thenReturn(Optional.of(existingProduct));
-    Seller seller = productService.getSellerByProductId(ExistingProductId);
+    Seller seller = productService.getSellerByProductId(existingProductId);
     assertEquals(existingSeller, seller);
   }
 
   @Test
   void testGetSellerByProductId_ProductNotFound() {
-    when(productRepository.findProductById(nonExistingProductId)).thenReturn(Optional.empty());
+    when(productRepository.findProductById(nonexistingProductId)).thenReturn(Optional.empty());
 
     ProductNotFoundException exception =
         assertThrows(
             ProductNotFoundException.class,
-            () -> productService.getSellerByProductId(nonExistingProductId));
+            () -> productService.getSellerByProductId(nonexistingProductId));
     assertEquals(
-        String.format(PRODUCT_NOT_FOUND_MESSAGE, nonExistingProductId), exception.getMessage());
+        String.format(PRODUCT_NOT_FOUND_MESSAGE, nonexistingProductId), exception.getMessage());
   }
 }
