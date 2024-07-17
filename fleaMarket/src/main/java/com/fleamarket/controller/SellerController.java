@@ -27,7 +27,7 @@ public class SellerController {
    */
   @PostMapping("/crteateSeller")
   ResponseEntity<String> createSeller(
-      @RequestParam(name = "seller", required = true) String seller) {
+      @RequestParam String seller) {
     sellerService.createSeller(seller);
     return ResponseEntity.ok("Seller was successfully created");
   }
@@ -67,7 +67,7 @@ public class SellerController {
    */
   @PatchMapping("/updateSellerName")
   public ResponseEntity<String> updateSellerName(
-      @RequestParam String oldUsername, String newUsername) {
+      @RequestParam String oldUsername,@RequestParam String newUsername) {
     sellerService.changeSellerName(oldUsername, newUsername);
     return ResponseEntity.ok("Seller was successfully updated");
   }
@@ -79,7 +79,7 @@ public class SellerController {
    * @param seller Name of the seller to add the product to
    */
   @PostMapping("/addProduct")
-  public ResponseEntity<String> addProduct(@RequestParam String product, String seller) {
+  public ResponseEntity<String> addProduct(@RequestParam String product,@RequestParam String seller) {
     sellerService.addProductToSeller(product, seller);
     return ResponseEntity.ok("Product was successfully added to seller");
   }
@@ -91,7 +91,7 @@ public class SellerController {
    * @param seller Name of the seller to delete the product from
    */
   @DeleteMapping("/deleteProduct")
-  public ResponseEntity<String> deleteProduct(@RequestParam String product, String seller) {
+  public ResponseEntity<String> deleteProduct(@RequestParam String product,@RequestParam String seller) {
     sellerService.deleteProduct(product, seller);
     return ResponseEntity.ok("Product was successfully deleted");
   }
@@ -105,7 +105,7 @@ public class SellerController {
    */
   @PatchMapping("/updateProduct")
   public ResponseEntity<String> updateProduct(
-      @RequestParam String oldProductName, String newProductName, String seller) {
+      @RequestParam String oldProductName,@RequestParam String newProductName,@RequestParam String seller) {
     sellerService.changeProduct(oldProductName, newProductName, seller);
     return ResponseEntity.ok("Product was successfully updated");
   }

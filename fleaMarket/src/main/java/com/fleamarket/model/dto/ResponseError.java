@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 @Getter
 @Data
 public class ResponseError {
-    private final HttpStatus status;
-    private final String message;
+  private final HttpStatus status;
+  private final String message;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private final LocalDateTime time = LocalDateTime.now();
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+  private final LocalDateTime time = LocalDateTime.now();
 }

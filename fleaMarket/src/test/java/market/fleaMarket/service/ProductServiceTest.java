@@ -21,52 +21,51 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+class ProductServiceTest {
+  private static final String PRODUCT_NOT_FOUND_MESSAGE = "Product with ID = \"%d\" doesn't exist";
+  private static long nonExistingProductId = 2L;
+  private static long ExistingProductId = 1L;
 
- class ProductServiceTest {
-    private static final String PRODUCT_NOT_FOUND_MESSAGE = "Product with ID = \"%d\" doesn't exist";
-    private  static long nonExistingProductId = 2L;
-    private  static long ExistingProductId = 1L;
+  @Mock private ProductRepository productRepository;
 
-    @Mock
-    private ProductRepository productRepository;
+  @InjectMocks private ProductService productService;
 
-    @InjectMocks
-    private ProductService productService;
+  private Product existingProduct;
+  private Seller existingSeller;
 
-    private Product existingProduct;
-    private Seller existingSeller;
+  @BeforeEach
+  public void setup() {
+    MockitoAnnotations.openMocks(this);
+    setupProductAndSeller();
+  }
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
-        setupProductAndSeller();
-    }
+  private void setupProductAndSeller() {
+    existingSeller = new Seller();
+    existingSeller.setSellerName("existingSeller");
 
-    private void setupProductAndSeller() {
-        existingSeller = new Seller();
-        existingSeller.setSellerName("existingSeller");
+    existingProduct = new Product();
+    existingProduct.setId(1L);
+    existingProduct.setProductName("existingProduct");
+    existingProduct.setSeller(existingSeller);
+  }
 
-        existingProduct = new Product();
-        existingProduct.setId(1L);
-        existingProduct.setProductName("existingProduct");
-        existingProduct.setSeller(existingSeller);
+  @Test
+  void testGetSellerByProductId_Success() {
+    when(productRepository.findProductById(ExistingProductId))
+        .thenReturn(Optional.of(existingProduct));
+    Seller seller = productService.getSellerByProductId(ExistingProductId);
+    assertEquals(existingSeller, seller);
+  }
 
+  @Test
+  void testGetSellerByProductId_ProductNotFound() {
+    when(productRepository.findProductById(nonExistingProductId)).thenReturn(Optional.empty());
 
-    }
-
-    @Test
-     void testGetSellerByProductId_Success() {
-        when(productRepository.findProductById(ExistingProductId)).thenReturn(Optional.of(existingProduct));
-        Seller seller = productService.getSellerByProductId(ExistingProductId);
-        assertEquals(existingSeller, seller);
-    }
-
-    @Test
-     void testGetSellerByProductId_ProductNotFound() {
-        when(productRepository.findProductById(nonExistingProductId)).thenReturn(Optional.empty());
-
-        ProductNotFoundException exception = assertThrows(ProductNotFoundException.class,
-                () -> productService.getSellerByProductId(nonExistingProductId));
-        assertEquals(String.format(PRODUCT_NOT_FOUND_MESSAGE, nonExistingProductId), exception.getMessage());
-    }
+    ProductNotFoundException exception =
+        assertThrows(
+            ProductNotFoundException.class,
+            () -> productService.getSellerByProductId(nonExistingProductId));
+    assertEquals(
+        String.format(PRODUCT_NOT_FOUND_MESSAGE, nonExistingProductId), exception.getMessage());
+  }
 }

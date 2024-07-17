@@ -3,7 +3,9 @@ package market.fleaMarket.service;
 import com.fleamarket.dao.ProductRepository;
 import com.fleamarket.dao.SellerRepository;
 import com.fleamarket.exception.ProductNotFoundException;
+import com.fleamarket.exception.ProductTakenException;
 import com.fleamarket.exception.SellerNotFoundException;
+import com.fleamarket.exception.SellerTakenException;
 import com.fleamarket.model.entity.Product;
 import com.fleamarket.model.entity.Seller;
 import com.fleamarket.service.SellerService;
@@ -24,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
- class SellerServiceTest {
+class SellerServiceTest {
   private static final String EXISTING_SELLER_NAME = "existingSeller";
   private static final String NON_EXISTING_SELLER_NAME = "nonExistingSeller";
   private static final String NEW_SELLER_NAME = "newSeller";
@@ -34,32 +36,32 @@ import static org.mockito.Mockito.*;
   @Mock private SellerRepository sellerRepository;
   @Mock private ProductRepository productRepository;
   @InjectMocks private SellerService sellerService;
-    private Seller existingSeller;
-    private Product existingProduct;
-    private List<Product> products;
+  private Seller existingSeller;
+  private Product existingProduct;
+  private List<Product> products;
 
-    @BeforeEach
-     void setup() {
-        MockitoAnnotations.openMocks(this);
-        setupSellersAndProducts();
-    }
+  @BeforeEach
+  void setup() {
+    MockitoAnnotations.openMocks(this);
+    setupSellersAndProducts();
+  }
 
-    private void setupSellersAndProducts() {
-        existingSeller = new Seller();
-        existingSeller.setSellerName(EXISTING_SELLER_NAME);
+  private void setupSellersAndProducts() {
+    existingSeller = new Seller();
+    existingSeller.setSellerName(EXISTING_SELLER_NAME);
 
-        existingProduct = new Product();
-        existingProduct.setProductName(EXISTING_PRODUCT_NAME);
-        existingProduct.setSeller(existingSeller);
+    existingProduct = new Product();
+    existingProduct.setProductName(EXISTING_PRODUCT_NAME);
+    existingProduct.setSeller(existingSeller);
 
-        products = new ArrayList<>();
-        products.add(existingProduct);
+    products = new ArrayList<>();
+    products.add(existingProduct);
 
-        existingSeller.setProducts(products);
-    }
+    existingSeller.setProducts(products);
+  }
 
   @Test
-   void testGetAllSellers() {
+  void testGetAllSellers() {
     List<Seller> sellers = new ArrayList<>();
     sellers.add(existingSeller);
     when(sellerRepository.findAll()).thenReturn(sellers);
@@ -71,7 +73,7 @@ import static org.mockito.Mockito.*;
   }
 
   @Test
-   void testDeleteSeller_Success() {
+  void testDeleteSeller_Success() {
     when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME))
         .thenReturn(Optional.of(existingSeller));
 
@@ -81,7 +83,7 @@ import static org.mockito.Mockito.*;
   }
 
   @Test
-   void testDeleteSeller_NotFound() {
+  void testDeleteSeller_NotFound() {
     when(sellerRepository.findSellerBySellerName(NON_EXISTING_SELLER_NAME))
         .thenReturn(Optional.empty());
 
@@ -92,7 +94,7 @@ import static org.mockito.Mockito.*;
   }
 
   @Test
-   void testCreateSeller_Success() {
+  void testCreateSeller_Success() {
     when(sellerRepository.existsSellerBySellerName(NEW_SELLER_NAME)).thenReturn(false);
 
     assertDoesNotThrow(() -> sellerService.createSeller(NEW_SELLER_NAME));
@@ -101,42 +103,50 @@ import static org.mockito.Mockito.*;
   }
 
   @Test
-   void testCreateSeller_Conflict() {
+  void testCreateSeller_Conflict() {
     when(sellerRepository.existsSellerBySellerName(EXISTING_SELLER_NAME)).thenReturn(true);
 
     assertThrows(
-        ResponseStatusException.class, () -> sellerService.createSeller(EXISTING_SELLER_NAME));
+        SellerTakenException.class, () -> sellerService.createSeller(EXISTING_SELLER_NAME));
 
     verify(sellerRepository, times(0)).save(any());
   }
-    @Test
-     void testCreateSellerThrowsExceptionWhenUsernameIsEmpty() {
-        String emptyUsername = "  ";
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            sellerService.createSeller(emptyUsername);
+  @Test
+  void testCreateSellerThrowsExceptionWhenUsernameIsEmpty() {
+    String emptyUsername = "  ";
+
+    IllegalArgumentException exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> {
+              sellerService.createSeller(emptyUsername);
+            });
+
+    assertEquals("Seller parameter cannot be empty", exception.getMessage());
+  }
+
+  @Test
+  void testGetAllProducts_SellerExists() {
+    when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME))
+        .thenReturn(Optional.of(existingSeller));
+    List<Product> products = sellerService.getAllProducts(EXISTING_SELLER_NAME);
+    assertNotNull(products);
+    assertEquals(1, products.size());
+    assertEquals(EXISTING_PRODUCT_NAME, products.get(0).getProductName());
+  }
+
+  @Test
+  void testGetAllProducts_SellerNotFound() {
+    assertThrows(
+        SellerNotFoundException.class,
+        () -> {
+          sellerService.getAllProducts(NON_EXISTING_SELLER_NAME);
         });
+  }
 
-        assertEquals("Seller parameter cannot be empty", exception.getMessage());
-    }
-    @Test
-    void testGetAllProducts_SellerExists() {
-        when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME)).thenReturn(Optional.of(existingSeller));
-        List<Product> products = sellerService.getAllProducts(EXISTING_SELLER_NAME);
-        assertNotNull(products);
-        assertEquals(1, products.size());
-        assertEquals(EXISTING_PRODUCT_NAME, products.get(0).getProductName());
-    }
-
-    @Test
-    void testGetAllProducts_SellerNotFound() {
-        assertThrows(SellerNotFoundException.class, () -> {
-            sellerService.getAllProducts(NON_EXISTING_SELLER_NAME);
-        });
-    }
-
-    @Test
-   void testChangeSellerName_Success() {
+  @Test
+  void testChangeSellerName_Success() {
     when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME))
         .thenReturn(Optional.of(existingSeller));
     when(sellerRepository.existsSellerBySellerName(NEW_SELLER_NAME)).thenReturn(false);
@@ -148,7 +158,7 @@ import static org.mockito.Mockito.*;
   }
 
   @Test
-   void testChangeSellerName_NotFound() {
+  void testChangeSellerName_NotFound() {
     when(sellerRepository.findSellerBySellerName(NON_EXISTING_SELLER_NAME))
         .thenReturn(Optional.empty());
 
@@ -160,138 +170,205 @@ import static org.mockito.Mockito.*;
   }
 
   @Test
-   void testChangeSellerName_Conflict() {
-    Seller existingSeller = new Seller();
-    Seller existingSeller2 = new Seller();
+  void testChangeSellerName_Conflict() {
     when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME))
-        .thenReturn(Optional.of(existingSeller2));
+        .thenReturn(Optional.of(existingSeller));
     when(sellerRepository.existsSellerBySellerName(EXISTING_SELLER_NAME)).thenReturn(true);
 
     assertThrows(
-        IllegalArgumentException.class,
+        SellerTakenException.class,
         () -> sellerService.changeSellerName(EXISTING_SELLER_NAME, EXISTING_SELLER_NAME));
   }
 
+  @Test
+  void testChangeSellerName_EmptyUsername() {
+    when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME))
+        .thenReturn(Optional.of(existingSeller));
 
-    @Test
-    void testAddProductToSeller_Success() {
+    IllegalArgumentException exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> sellerService.changeSellerName(EXISTING_SELLER_NAME, ""));
 
-        existingSeller.setProducts(products);
+    assertEquals("Seller parameter cannot be empty", exception.getMessage());
+  }
 
-        when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME)).thenReturn(Optional.of(existingSeller));
-        when(productRepository.save(any())).thenReturn(existingProduct);
+  @Test
+  void testAddProductToSeller_Success() {
 
-        sellerService.addProductToSeller(NON_EXISTING_PRODUCT_NAME, EXISTING_SELLER_NAME);
+    existingSeller.setProducts(products);
 
-        assertEquals(2, existingSeller.getProducts().size());
-        assertEquals(NON_EXISTING_PRODUCT_NAME, existingSeller.getProducts().get(1).getProductName());
-        verify(productRepository, times(1)).save(any(Product.class));
-        verify(sellerRepository, times(1)).save(existingSeller);
-    }
+    when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME))
+        .thenReturn(Optional.of(existingSeller));
 
-    @Test
-    void testAddProductToSeller_SellerNotFound() {
-        when(sellerRepository.findSellerBySellerName(NON_EXISTING_SELLER_NAME)).thenReturn(Optional.empty());
+    when(productRepository.save(any())).thenReturn(existingProduct);
 
-        SellerNotFoundException exception = assertThrows(SellerNotFoundException.class, () -> {
-            sellerService.addProductToSeller(NON_EXISTING_PRODUCT_NAME, NON_EXISTING_SELLER_NAME);
-        });
+    sellerService.addProductToSeller(NON_EXISTING_PRODUCT_NAME, EXISTING_SELLER_NAME);
 
-        assertEquals("Seller \"nonExistingSeller\" doesn't exist", exception.getMessage());
-    }
+    assertEquals(2, existingSeller.getProducts().size());
+    assertEquals(NON_EXISTING_PRODUCT_NAME, existingSeller.getProducts().get(1).getProductName());
+    verify(productRepository, times(1)).save(any(Product.class));
+    verify(sellerRepository, times(1)).save(existingSeller);
+  }
 
-    @Test
-    void testAddProductToSeller_ProductParameterEmpty() {
-        when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME)).thenReturn(Optional.of(existingSeller));
+  @Test
+  void testAddProductToSeller_SellerNotFound() {
+    when(sellerRepository.findSellerBySellerName(NON_EXISTING_SELLER_NAME))
+        .thenReturn(Optional.empty());
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            sellerService.addProductToSeller("", EXISTING_SELLER_NAME);
-        });
+    SellerNotFoundException exception =
+        assertThrows(
+            SellerNotFoundException.class,
+            () -> {
+              sellerService.addProductToSeller(NON_EXISTING_PRODUCT_NAME, NON_EXISTING_SELLER_NAME);
+            });
 
-        assertEquals("Product parameter cannot be empty", exception.getMessage());
-    }
+    assertEquals("Seller \"nonExistingSeller\" doesn't exist", exception.getMessage());
+  }
 
-    @Test
-    void testAddProductToSeller_ProductAlreadyAdded() {
-        when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME)).thenReturn(Optional.of(existingSeller));
+  @Test
+  void testAddProductToSeller_ProductParameterEmpty() {
+    when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME))
+        .thenReturn(Optional.of(existingSeller));
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            sellerService.addProductToSeller(EXISTING_PRODUCT_NAME, EXISTING_SELLER_NAME);
-        });
+    IllegalArgumentException exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> {
+              sellerService.addProductToSeller("", EXISTING_SELLER_NAME);
+            });
 
-        assertEquals("Product existingProduct was already added yet(((((", exception.getMessage());
-    }
+    assertEquals("Product parameter cannot be empty", exception.getMessage());
+  }
 
+  @Test
+  void testAddProductToSeller_ProductAlreadyAdded() {
+    when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME))
+        .thenReturn(Optional.of(existingSeller));
 
-    @Test
-    void testDeleteProduct_Success() {
-        existingSeller.setProducts(products);
+    ProductTakenException exception =
+        assertThrows(
+            ProductTakenException.class,
+            () -> {
+              sellerService.addProductToSeller(EXISTING_PRODUCT_NAME, EXISTING_SELLER_NAME);
+            });
 
-        when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME)).thenReturn(Optional.of(existingSeller));
-        sellerService.deleteProduct(EXISTING_PRODUCT_NAME, EXISTING_SELLER_NAME);
+    assertEquals("Product existingProduct already exists(((((", exception.getMessage());
+  }
 
+  @Test
+  void testDeleteProduct_Success() {
+    existingSeller.setProducts(products);
 
-        assertTrue(existingSeller.getProducts().isEmpty());
-        verify(productRepository, times(1)).delete(existingProduct);
-        verify(sellerRepository, times(1)).save(existingSeller);
-    }
+    when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME))
+        .thenReturn(Optional.of(existingSeller));
+    sellerService.deleteProduct(EXISTING_PRODUCT_NAME, EXISTING_SELLER_NAME);
 
-    @Test
-    void testDeleteProduct_SellerNotFound() {
-        when(sellerRepository.findSellerBySellerName(NON_EXISTING_SELLER_NAME)).thenReturn(Optional.empty());
+    assertTrue(existingSeller.getProducts().isEmpty());
+    verify(productRepository, times(1)).delete(existingProduct);
+    verify(sellerRepository, times(1)).save(existingSeller);
+  }
 
-        SellerNotFoundException exception = assertThrows(SellerNotFoundException.class, () -> {
-            sellerService.deleteProduct(EXISTING_PRODUCT_NAME,NON_EXISTING_SELLER_NAME);
-        });
-        assertEquals("Seller \"nonExistingSeller\" doesn't exist", exception.getMessage());
-    }
+  @Test
+  void testDeleteProduct_SellerNotFound() {
+    when(sellerRepository.findSellerBySellerName(NON_EXISTING_SELLER_NAME))
+        .thenReturn(Optional.empty());
 
-    @Test
-    void testDeleteProduct_ProductNotFound() {
-        when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME)).thenReturn(Optional.of(existingSeller));
-        ProductNotFoundException exception = assertThrows(ProductNotFoundException.class, () -> {
-            sellerService.deleteProduct(NON_EXISTING_PRODUCT_NAME, EXISTING_SELLER_NAME);
-        });
+    SellerNotFoundException exception =
+        assertThrows(
+            SellerNotFoundException.class,
+            () -> {
+              sellerService.deleteProduct(EXISTING_PRODUCT_NAME, NON_EXISTING_SELLER_NAME);
+            });
+    assertEquals("Seller \"nonExistingSeller\" doesn't exist", exception.getMessage());
+  }
 
-        assertEquals("Product nonExistingProduct doesn't exist(((((", exception.getMessage());
-    }
+  @Test
+  void testDeleteProduct_ProductNotFound() {
+    when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME))
+        .thenReturn(Optional.of(existingSeller));
+    ProductNotFoundException exception =
+        assertThrows(
+            ProductNotFoundException.class,
+            () -> {
+              sellerService.deleteProduct(NON_EXISTING_PRODUCT_NAME, EXISTING_SELLER_NAME);
+            });
 
-    @Test
-     void testChangeProduct_Success() {
-        when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME)).thenReturn(Optional.of(existingSeller));
-        assertDoesNotThrow(() -> sellerService.changeProduct(EXISTING_PRODUCT_NAME, NEW_PRODUCT_NAME, EXISTING_SELLER_NAME));
-        assertEquals(NEW_PRODUCT_NAME, existingProduct.getProductName());
-        verify(productRepository, times(1)).save(existingProduct);
-    }
+    assertEquals("Product nonExistingProduct doesn't exist(((((", exception.getMessage());
+  }
 
-    @Test
-     void testChangeProduct_ProductNotFound() {
-        when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME)).thenReturn(Optional.of(existingSeller));
-        ProductNotFoundException exception = assertThrows(ProductNotFoundException.class,
-                () -> sellerService.changeProduct(NON_EXISTING_PRODUCT_NAME, NEW_PRODUCT_NAME, EXISTING_SELLER_NAME));
-        assertEquals(String.format("Product %s doesn't exist(((((", NON_EXISTING_PRODUCT_NAME), exception.getMessage());
-    }
+  @Test
+  void testChangeProduct_Success() {
+    when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME))
+        .thenReturn(Optional.of(existingSeller));
+    assertDoesNotThrow(
+        () ->
+            sellerService.changeProduct(
+                EXISTING_PRODUCT_NAME, NEW_PRODUCT_NAME, EXISTING_SELLER_NAME));
+    assertEquals(NEW_PRODUCT_NAME, existingProduct.getProductName());
+    verify(productRepository, times(1)).save(existingProduct);
+  }
 
-    @Test
-     void testChangeProduct_DuplicateProductName() {
-        Product newProduct = new Product();
-        newProduct.setProductName(NEW_PRODUCT_NAME);
-        newProduct.setSeller(existingSeller);
-        products.add(newProduct);
-        existingSeller.setProducts(products);
-        when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME)).thenReturn(Optional.of(existingSeller));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> sellerService.changeProduct(EXISTING_PRODUCT_NAME, NEW_PRODUCT_NAME, EXISTING_SELLER_NAME));
-        assertEquals(String.format("Product with name %s already exist(((((", NEW_PRODUCT_NAME), exception.getMessage());
-    }
+  @Test
+  void testChangeProduct_ProductNotFound() {
+    when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME))
+        .thenReturn(Optional.of(existingSeller));
+    ProductNotFoundException exception =
+        assertThrows(
+            ProductNotFoundException.class,
+            () ->
+                sellerService.changeProduct(
+                    NON_EXISTING_PRODUCT_NAME, NEW_PRODUCT_NAME, EXISTING_SELLER_NAME));
+    assertEquals(
+        String.format("Product %s doesn't exist(((((", NON_EXISTING_PRODUCT_NAME),
+        exception.getMessage());
+  }
 
-    @Test
-     void testChangeProduct_SellerNotFound() {
-        when(sellerRepository.findSellerBySellerName(NON_EXISTING_SELLER_NAME)).thenReturn(Optional.empty());
+  @Test
+  void testChangeProduct_DuplicateProductName() {
+    Product newProduct = new Product();
+    newProduct.setProductName(NEW_PRODUCT_NAME);
+    newProduct.setSeller(existingSeller);
+    products.add(newProduct);
+    existingSeller.setProducts(products);
+    when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME))
+        .thenReturn(Optional.of(existingSeller));
+    ProductTakenException exception =
+        assertThrows(
+                ProductTakenException.class,
+            () ->
+                sellerService.changeProduct(
+                    EXISTING_PRODUCT_NAME, NEW_PRODUCT_NAME, EXISTING_SELLER_NAME));
+    assertEquals(
+        String.format("Product newProduct already exists(((((", NEW_PRODUCT_NAME),
+        exception.getMessage());
+  }
 
-        SellerNotFoundException exception = assertThrows(SellerNotFoundException.class,
-                () -> sellerService.changeProduct(EXISTING_PRODUCT_NAME, NEW_PRODUCT_NAME, NON_EXISTING_SELLER_NAME));
-        assertEquals(String.format("Seller \"%s\" doesn't exist", NON_EXISTING_SELLER_NAME), exception.getMessage());
-    }
+  @Test
+  void testChangeProduct_SellerNotFound() {
+    when(sellerRepository.findSellerBySellerName(NON_EXISTING_SELLER_NAME))
+        .thenReturn(Optional.empty());
 
+    SellerNotFoundException exception =
+        assertThrows(
+            SellerNotFoundException.class,
+            () ->
+                sellerService.changeProduct(
+                    EXISTING_PRODUCT_NAME, NEW_PRODUCT_NAME, NON_EXISTING_SELLER_NAME));
+    assertEquals(
+        String.format("Seller \"%s\" doesn't exist", NON_EXISTING_SELLER_NAME),
+        exception.getMessage());
+  }
+
+  @Test
+  void testChangeProduct_EmptyProduct() {
+    when(sellerRepository.findSellerBySellerName(EXISTING_SELLER_NAME))
+        .thenReturn(Optional.of(existingSeller));
+
+    IllegalArgumentException exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> sellerService.changeProduct(EXISTING_PRODUCT_NAME, "", EXISTING_SELLER_NAME));
+    assertEquals(String.format("Product parameter cannot be empty"), exception.getMessage());
+  }
 }

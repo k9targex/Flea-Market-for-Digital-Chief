@@ -12,14 +12,15 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name="product")
-    private String productName;
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "seller_id")
-    private Seller seller;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
+  @Column(name = "product")
+  private String productName;
+
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "seller_id")
+  private Seller seller;
 }
