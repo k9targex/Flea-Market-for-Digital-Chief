@@ -102,7 +102,7 @@ cd FleaMarket/fleaMarket
 ```
 
 ## Build and Run
-### Build and Run Script
+### Build and Run Script (Windows)
 
 To simplify the build and run process, execute the following steps:
 
