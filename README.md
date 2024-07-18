@@ -63,7 +63,7 @@ FleaMarket Application is a RESTful web service built with Spring Boot for manag
 - Java 17
 - Maven 3.9.6 and higher
 - PostgreSQL
-### Clone the Repository
+## Clone the Repository
 
 1. Clone the repository to your local machine:
 
@@ -75,8 +75,8 @@ git clone https://github.com/k9targex/FleaMarket.git
 cd fleamarket
 ```
 
-### Build and Run
-#### Build and Run Script
+## Build and Run
+### Build and Run Script
 
 To simplify the build and run process, execute the following steps:
 
@@ -91,7 +91,7 @@ fleamarket_start.bat
 ```
 
 
-#### Manual Build and Run
+## Manual Build and Run
 
 If you prefer to build and run manually:
 1. Configure the database connection in `src/main/resources/application.properties`:
@@ -104,7 +104,7 @@ spring.datasource.password={password}
 4. Navigate to the root directory of your project.
 
 
-#### Build the Application
+### Build the Application
 
 3. Build the project using Maven:
 
@@ -114,7 +114,7 @@ mvn clean install
 
 This command compiles the code, executes tests, and packages the application into a JAR file.
 
-#### Run the Application
+### Run the Application
 4. Make sure that database FleaMarket is created.
 
 5. Start the application using Maven:directory:
@@ -127,14 +127,14 @@ java -jar target/fleamarket-0.0.1-SNAPSHOT.jar
 ```
 
 
-### Troubleshooting
+## Troubleshooting
 1. Check the console output for any error messages if the application fails to start.
 2. Verify the correctness of database connection settings in application.properties.
 3. Ensure Java 17 and Maven are correctly installed and configured on your system.
 
 
-### API Documentation and Testing
-#### Swagger
+## API Documentation and Testing
+### Swagger
 Swagger is integrated into this application to provide interactive API documentation. To access Swagger UI:
 1. Start the application.
 2. Open your web browser and navigate to
@@ -144,7 +144,7 @@ Swagger is integrated into this application to provide interactive API documenta
 
 This interface allows you to explore the API endpoints, view request and response formats, and execute requests directly from the browser.
 
-#### Unit Tests
+### Unit Tests
 The application includes comprehensive unit tests covering 100% of the business logic. Run the tests using:
 ```sh
 mvn test
@@ -153,7 +153,7 @@ mvn test
 
 
 
-### Postman
+## Postman
 A Postman collection is provided to facilitate testing the API endpoints. Follow these steps to use it:
 
 1. Import the Postman collection:
@@ -167,7 +167,7 @@ A Postman collection is provided to facilitate testing the API endpoints. Follow
 
 
 
-  ## License
+## License
   This project is licensed under the MIT License. See the LICENSE file for more information.
 ## Author
 This application was developed by Mozheiko Dmitry.
