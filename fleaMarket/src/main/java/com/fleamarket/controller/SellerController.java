@@ -3,12 +3,11 @@ package com.fleamarket.controller;
 import com.fleamarket.model.entity.Product;
 import com.fleamarket.model.entity.Seller;
 import com.fleamarket.service.SellerService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/sellers")
@@ -26,8 +25,7 @@ public class SellerController {
    * @param seller Name of the seller to create
    */
   @PostMapping("/crteateSeller")
-  ResponseEntity<String> createSeller(
-      @RequestParam String seller) {
+  ResponseEntity<String> createSeller(@RequestParam String seller) {
     sellerService.createSeller(seller);
     return ResponseEntity.ok("Seller was successfully created");
   }
@@ -67,7 +65,7 @@ public class SellerController {
    */
   @PatchMapping("/updateSellerName")
   public ResponseEntity<String> updateSellerName(
-      @RequestParam String oldUsername,@RequestParam String newUsername) {
+      @RequestParam String oldUsername, @RequestParam String newUsername) {
     sellerService.changeSellerName(oldUsername, newUsername);
     return ResponseEntity.ok("Seller was successfully updated");
   }
@@ -79,7 +77,8 @@ public class SellerController {
    * @param seller Name of the seller to add the product to
    */
   @PostMapping("/addProduct")
-  public ResponseEntity<String> addProduct(@RequestParam String product,@RequestParam String seller) {
+  public ResponseEntity<String> addProduct(
+      @RequestParam String product, @RequestParam String seller) {
     sellerService.addProductToSeller(product, seller);
     return ResponseEntity.ok("Product was successfully added to seller");
   }
@@ -91,7 +90,8 @@ public class SellerController {
    * @param seller Name of the seller to delete the product from
    */
   @DeleteMapping("/deleteProduct")
-  public ResponseEntity<String> deleteProduct(@RequestParam String product,@RequestParam String seller) {
+  public ResponseEntity<String> deleteProduct(
+      @RequestParam String product, @RequestParam String seller) {
     sellerService.deleteProduct(product, seller);
     return ResponseEntity.ok("Product was successfully deleted");
   }
@@ -105,7 +105,9 @@ public class SellerController {
    */
   @PatchMapping("/updateProduct")
   public ResponseEntity<String> updateProduct(
-      @RequestParam String oldProductName,@RequestParam String newProductName,@RequestParam String seller) {
+      @RequestParam String oldProductName,
+      @RequestParam String newProductName,
+      @RequestParam String seller) {
     sellerService.changeProduct(oldProductName, newProductName, seller);
     return ResponseEntity.ok("Product was successfully updated");
   }
