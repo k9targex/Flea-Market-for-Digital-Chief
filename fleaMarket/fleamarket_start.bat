@@ -6,7 +6,7 @@ set /p db_user="Enter pgAdmin username: "
 set /p db_password="Enter pgAdmin password: "
 
 
-REM Путь к файлу application.properties (предполагается, что он находится в директории проекта)
+REM Путь к файлу application.properties 
 set properties_file=src\main\resources\application.properties
 
 REM Поиск и замена имени пользователя
