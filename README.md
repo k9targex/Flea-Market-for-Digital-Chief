@@ -12,31 +12,57 @@ FleaMarket Application is a RESTful web service built with Spring Boot for manag
 
 ### SellerService
 
-#### Endpoints
+### Endpoints
 
-- **GET /api/sellers**:
-  - Retrieves all sellers from the database.
-  
-- **DELETE /api/sellers/{username}**:
-  - Deletes a seller by their username.
-  
-- **POST /api/sellers**:
-  - Creates a new seller with the provided username.
-  
-- **PUT /api/sellers/{oldUsername}**:
-  - Changes the username of an existing seller.
+- **GET /sellers/getAllSellers**:
+  - **Parameters**: None
+  - **Returns**: List of all sellers
 
-- **GET /api/sellers/{seller}/products**:
-  - Retrieves all products associated with a seller.
+- **DELETE /sellers/deleteSeller**:
+  - **Parameters**: 
+    - `seller` (String): Username of the seller to delete
+  - **Returns**: Success message
 
-- **POST /api/sellers/{seller}/products**:
-  - Adds a new product to a seller.
-  
-- **DELETE /api/sellers/{seller}/products/{productName}**:
-  - Deletes a product from a seller's inventory.
-  
-- **PUT /api/sellers/{seller}/products/{oldProductName}**:
-  - Changes the name of a product associated with a seller.
+- **POST /sellers/crteateSeller**:
+  - **Parameters**: 
+    - `seller` (String): Username of the new seller to create
+  - **Returns**: Success message
+
+- **PATCH /sellers/updateSellerName**:
+  - **Parameters**: 
+    - `oldUsername` (String): Current username of the seller
+    - `newUsername` (String): New username to change to
+  - **Returns**: Success message
+
+- **GET /sellers/getAllSellerPtroducts**:
+  - **Parameters**: 
+    - `seller` (String): Username of the seller to retrieve products for
+  - **Returns**: List of products associated with the seller
+
+- **POST /sellers/addProduct**:
+  - **Parameters**: 
+    - `product` (String): Name of the product to add
+    - `seller` (String): Username of the seller to add the product to
+  - **Returns**: Success message
+
+- **DELETE /sellers/deleteProduct**:
+  - **Parameters**: 
+    - `product` (String): Name of the product to delete
+    - `seller` (String): Username of the seller from whose inventory to delete the product
+  - **Returns**: Success message
+
+- **PATCH /sellers/updateProduct**:
+  - **Parameters**: 
+    - `oldProductName` (String): Current name of the product
+    - `newProductName` (String): New name to change to
+    - `seller` (String): Username of the seller associated with the product
+  - **Returns**: Success message
+
+- **GET /products/getProcuctSeller**:
+  - **Parameters**: 
+    - `productId` (Long): ID of the product to retrieve the seller for
+  - **Returns**: Seller associated with the product
+
 
 #### Exceptions
 
