@@ -1,0 +1,268 @@
+{
+	"info": {
+		"_postman_id": "e727afd8-f3df-4219-8737-7d30899c750c",
+		"name": "FleaMarket",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33190468",
+		"_collection_link": "https://www.postman.com/spaceflight-astronomer-86351839/workspace/fleamarket-digitalchief/collection/33190468-e727afd8-f3df-4219-8737-7d30899c750c?action=share&source=collection_link&creator=33190468"
+	},
+	"item": [
+		{
+			"name": "AddSeller",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sellers/crteateSeller?seller=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sellers",
+						"crteateSeller"
+					],
+					"query": [
+						{
+							"key": "seller",
+							"value": ""
+						}
+					]
+				},
+				"description": "<img src=\"https://content.pstmn.io/915058b2-8f6b-49fa-90ae-53adf6dcf804/aW1hZ2UucG5n\" width=\"795\" height=\"155\">"
+			},
+			"response": []
+		},
+		{
+			"name": "AddProduct",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sellers/addProduct?product=&seller=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sellers",
+						"addProduct"
+					],
+					"query": [
+						{
+							"key": "product",
+							"value": ""
+						},
+						{
+							"key": "seller",
+							"value": ""
+						}
+					]
+				},
+				"description": "<img src=\"https://content.pstmn.io/f71da15b-3e9c-411e-bc89-8bcb1225cca0/aW1hZ2UucG5n\" alt=\"\" height=\"179\" width=\"847\">"
+			},
+			"response": []
+		},
+		{
+			"name": "updateSellerName",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sellers/updateSellerName?oldUsername=&newUsername=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sellers",
+						"updateSellerName"
+					],
+					"query": [
+						{
+							"key": "oldUsername",
+							"value": ""
+						},
+						{
+							"key": "newUsername",
+							"value": ""
+						}
+					]
+				},
+				"description": "<img src=\"https://content.pstmn.io/45b58457-6cbc-4476-882f-083ba0bcdb98/aW1hZ2UucG5n\" width=\"712\" height=\"181\">"
+			},
+			"response": []
+		},
+		{
+			"name": "updateProduct",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sellers/updateProduct?oldProductName=&newProductName=&seller=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sellers",
+						"updateProduct"
+					],
+					"query": [
+						{
+							"key": "oldProductName",
+							"value": ""
+						},
+						{
+							"key": "newProductName",
+							"value": ""
+						},
+						{
+							"key": "seller",
+							"value": ""
+						}
+					]
+				},
+				"description": "<img src=\"https://content.pstmn.io/bf8c6d46-df1c-407b-b1eb-9fe4469c3489/aW1hZ2UucG5n\" alt=\"\" height=\"226\" width=\"757\">"
+			},
+			"response": []
+		},
+		{
+			"name": "GetSellers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sellers/getAllSellers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sellers",
+						"getAllSellers"
+					]
+				},
+				"description": "<img src=\"https://content.pstmn.io/409020f9-0cdc-4cf0-ab7d-88649fd3ad52/aW1hZ2UucG5n\" alt=\"\" height=\"114\" width=\"377\">"
+			},
+			"response": []
+		},
+		{
+			"name": "GetSellerProduct",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sellers/getAllSellerPtroducts?seller=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sellers",
+						"getAllSellerPtroducts"
+					],
+					"query": [
+						{
+							"key": "seller",
+							"value": ""
+						}
+					]
+				},
+				"description": "<img src=\"https://content.pstmn.io/01776697-eb1e-4286-9a14-5012e319f20a/aW1hZ2UucG5n\" alt=\"\" height=\"157\" width=\"740\">"
+			},
+			"response": []
+		},
+		{
+			"name": "deleteSeller",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sellers/deleteSeller?seller=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sellers",
+						"deleteSeller"
+					],
+					"query": [
+						{
+							"key": "seller",
+							"value": ""
+						}
+					]
+				},
+				"description": "<img src=\"https://content.pstmn.io/d156f2b9-3ad4-424a-85ef-5e1dd0e39f88/aW1hZ2UucG5n\" alt=\"\" height=\"137\" width=\"709\">"
+			},
+			"response": []
+		},
+		{
+			"name": "deleteProduct",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sellers/deleteProduct?product=&seller=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sellers",
+						"deleteProduct"
+					],
+					"query": [
+						{
+							"key": "product",
+							"value": ""
+						},
+						{
+							"key": "seller",
+							"value": ""
+						}
+					]
+				},
+				"description": "<img src=\"https://content.pstmn.io/0c32b8c3-97ff-4c6f-a00e-394ef0607f5b/aW1hZ2UucG5n\" alt=\"\" height=\"174\" width=\"707\">"
+			},
+			"response": []
+		},
+		{
+			"name": "getProductSeller",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/products/getProcuctSeller?productId=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products",
+						"getProcuctSeller"
+					],
+					"query": [
+						{
+							"key": "productId",
+							"value": ""
+						}
+					]
+				},
+				"description": "<img src=\"https://content.pstmn.io/795d551e-42da-46ac-a814-1a95d14cc812/aW1hZ2UucG5n\" alt=\"\" height=\"152\" width=\"677\">"
+			},
+			"response": []
+		}
+	]
+}
