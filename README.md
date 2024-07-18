@@ -1,7 +1,7 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=k9targex_FleaMarket&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=k9targex_FleaMarket)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=k9targex_FleaMarket&metric=bugs)](https://sonarcloud.io/summary/new_code?id=k9targex_FleaMarket)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=k9targex_FleaMarket&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=k9targex_FleaMarket)
-[![Duplications](https://sonarcloud.io/api/project_badges/measure?project=k9targex_FleaMarket&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=k9targex_FleaMarket)
+
 # FleaMarket Application for DigitalChief
 
 ## Overview
@@ -163,3 +163,11 @@ A Postman collection is provided to facilitate testing the API endpoints. Follow
 2. Use the imported collection to send requests to your running application. The collection includes predefined requests for all major functionalities of the application.
 
     This setup allows you to quickly test and interact with the API, ensuring that all endpoints work as expected.
+
+
+
+
+  ## License
+  This project is licensed under the MIT License. See the LICENSE file for more information.
+## Author
+This application was developed by Mozheiko Dmitry.
