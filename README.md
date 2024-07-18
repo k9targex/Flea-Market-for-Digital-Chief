@@ -98,7 +98,7 @@ git clone https://github.com/k9targex/FleaMarket.git
 ```
 2.  Navigate into the cloned repository:
 ```sh
-cd fleamarket
+cd FleaMarket
 ```
 
 ## Build and Run
