@@ -11,7 +11,6 @@ import com.fleamarket.model.entity.Seller;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -64,7 +63,7 @@ public class SellerService {
    *
    * @param username Username of the new seller to create
    * @throws IllegalArgumentException if the username is empty
-   * @throws ResponseStatusException with HTTP status Conflict if the username is already taken
+   * @throws SellerTakenException with HTTP status Conflict if the username is already taken
    */
   public void createSeller(String username) {
     if (username.trim().isEmpty()) {
@@ -84,7 +83,8 @@ public class SellerService {
    * @param oldUsername Current username of the seller
    * @param newUsername New username to change to
    * @throws SellerNotFoundException if the seller with the old username is not found
-   * @throws IllegalArgumentException if the new username is already taken
+   * @throws IllegalArgumentException if the new name is empty
+   * @throws SellerTakenException if the new username is already taken
    */
   public void changeSellerName(String oldUsername, String newUsername) {
     Seller sellerOptional = findSeller(oldUsername);
@@ -116,8 +116,8 @@ public class SellerService {
    *
    * @param product Name of the product to add
    * @param seller Username of the seller to add the product to
-   * @throws IllegalArgumentException if the product name is empty or if the product was already
-   *     added
+   * @throws IllegalArgumentException if the product name is empty
+   * @throws ProductTakenException if the product was already added
    * @throws SellerNotFoundException if the seller with the given username is not found
    */
   public void addProductToSeller(String product, String seller) {
@@ -164,8 +164,9 @@ public class SellerService {
    * @param newProductName New name to change to
    * @param seller Username of the seller associated with the product
    * @throws ProductNotFoundException if the product with the old name does not exist
-   * @throws IllegalArgumentException if the new product name already exists for the seller
+   * @throws ProductTakenException if the new product name already exists for the seller
    * @throws SellerNotFoundException if the seller with the given username is not found
+   * @throws IllegalArgumentException if the product name is empty
    */
   public void changeProduct(String oldProductName, String newProductName, String seller) {
     Seller sellerOptional = findSeller(seller);

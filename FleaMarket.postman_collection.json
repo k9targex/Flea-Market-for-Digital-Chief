@@ -30,7 +30,7 @@
 						}
 					]
 				},
-				"description": "<img src=\"https://content.pstmn.io/915058b2-8f6b-49fa-90ae-53adf6dcf804/aW1hZ2UucG5n\" width=\"795\" height=\"155\">"
+				"description": "<img src=\"https://content.pstmn.io/d53309de-b324-4e6f-be1b-0998fc2966f7/aW1hZ2UucG5n\" alt=\"\" height=\"156\" width=\"737\">"
 			},
 			"response": []
 		},
@@ -61,7 +61,7 @@
 						}
 					]
 				},
-				"description": "<img src=\"https://content.pstmn.io/f71da15b-3e9c-411e-bc89-8bcb1225cca0/aW1hZ2UucG5n\" alt=\"\" height=\"179\" width=\"847\">"
+				"description": "<img src=\"https://content.pstmn.io/8921fa8f-1059-4313-beb6-0ab082c28c16/aW1hZ2UucG5n\" alt=\"\" height=\"202\" width=\"712\">"
 			},
 			"response": []
 		},
@@ -92,7 +92,7 @@
 						}
 					]
 				},
-				"description": "<img src=\"https://content.pstmn.io/45b58457-6cbc-4476-882f-083ba0bcdb98/aW1hZ2UucG5n\" width=\"712\" height=\"181\">"
+				"description": "<img src=\"https://content.pstmn.io/0cf59bb8-da1b-4f47-9246-f4abe44aebe8/aW1hZ2UucG5n\" alt=\"\" height=\"201\" width=\"703\">"
 			},
 			"response": []
 		},
@@ -127,55 +127,7 @@
 						}
 					]
 				},
-				"description": "<img src=\"https://content.pstmn.io/bf8c6d46-df1c-407b-b1eb-9fe4469c3489/aW1hZ2UucG5n\" alt=\"\" height=\"226\" width=\"757\">"
-			},
-			"response": []
-		},
-		{
-			"name": "GetSellers",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/sellers/getAllSellers",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"sellers",
-						"getAllSellers"
-					]
-				},
-				"description": "<img src=\"https://content.pstmn.io/409020f9-0cdc-4cf0-ab7d-88649fd3ad52/aW1hZ2UucG5n\" alt=\"\" height=\"114\" width=\"377\">"
-			},
-			"response": []
-		},
-		{
-			"name": "GetSellerProduct",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/sellers/getAllSellerPtroducts?seller=",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"sellers",
-						"getAllSellerPtroducts"
-					],
-					"query": [
-						{
-							"key": "seller",
-							"value": ""
-						}
-					]
-				},
-				"description": "<img src=\"https://content.pstmn.io/01776697-eb1e-4286-9a14-5012e319f20a/aW1hZ2UucG5n\" alt=\"\" height=\"157\" width=\"740\">"
+				"description": "<img src=\"https://content.pstmn.io/e62e9232-7b04-41c7-84da-e7569918742f/aW1hZ2UucG5n\" alt=\"\" height=\"243\" width=\"715\">"
 			},
 			"response": []
 		},
@@ -234,6 +186,54 @@
 					]
 				},
 				"description": "<img src=\"https://content.pstmn.io/0c32b8c3-97ff-4c6f-a00e-394ef0607f5b/aW1hZ2UucG5n\" alt=\"\" height=\"174\" width=\"707\">"
+			},
+			"response": []
+		},
+		{
+			"name": "GetSellers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sellers/getAllSellers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sellers",
+						"getAllSellers"
+					]
+				},
+				"description": "<img src=\"https://content.pstmn.io/409020f9-0cdc-4cf0-ab7d-88649fd3ad52/aW1hZ2UucG5n\" alt=\"\" height=\"114\" width=\"377\">"
+			},
+			"response": []
+		},
+		{
+			"name": "GetSellerProduct",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/sellers/getAllSellerPtroducts?seller=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sellers",
+						"getAllSellerPtroducts"
+					],
+					"query": [
+						{
+							"key": "seller",
+							"value": ""
+						}
+					]
+				},
+				"description": "<img src=\"https://content.pstmn.io/01776697-eb1e-4286-9a14-5012e319f20a/aW1hZ2UucG5n\" alt=\"\" height=\"157\" width=\"740\">"
 			},
 			"response": []
 		},
