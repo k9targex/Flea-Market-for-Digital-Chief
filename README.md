@@ -89,7 +89,7 @@ To simplify the build and run process, execute the following steps:
 ```sh
 fleamarket_start.bat
 ```
-
+Just launch this script and enjoy!
 
 ## Manual Build and Run
 
