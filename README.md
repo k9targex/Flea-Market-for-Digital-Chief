@@ -98,11 +98,11 @@ git clone https://github.com/k9targex/FleaMarket.git
 ```
 2.  Navigate into the cloned repository:
 ```sh
-cd FleaMarket
+cd FleaMarket/fleaMarket
 ```
 
 ## Build and Run
-### Build and Run Script
+### Build and Run Script (Windows)
 
 To simplify the build and run process, execute the following steps:
 
